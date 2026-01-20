@@ -8,7 +8,7 @@ package train;
  * @author Philippe Tanguy <philippe.tanguy@imt-atlantique.fr>
  */
 public class Section extends Element {
-	public Section(String name) {
-		super(name);
-	}
+    public Section(String name) {
+        super(name, 1); // Capacité de 1 train max
+    }
 }

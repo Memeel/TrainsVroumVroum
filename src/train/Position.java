@@ -52,4 +52,6 @@ public class Position implements Cloneable {
 		result.append(this.direction);
 		return result.toString();
 	}
+	
+	public Direction getDirection() { return direction; }
 }

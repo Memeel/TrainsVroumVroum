@@ -20,6 +20,24 @@ public class Railway {
 			e.setRailway(this);
 	}
 
+	public Element getNextElement(Element current, Direction d) {
+        int index = -1;
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[i] == current) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) return null;
+
+        if (d == Direction.LR) {
+            return (index + 1 < elements.length) ? elements[index + 1] : null;
+        } else {
+            return (index - 1 >= 0) ? elements[index - 1] : null;
+        }
+    }
+	
+
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
