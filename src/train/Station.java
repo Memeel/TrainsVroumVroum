@@ -8,13 +8,10 @@ package train;
  * @author Fabien Dagnat <fabien.dagnat@imt-atlantique.fr>
  * @author Philippe Tanguy <philippe.tanguy@imt-atlantique.fr>
  */
-public class Station extends Element {
-	private final int size;
 
-	public Station(String name, int size) {
-		super(name);
-		if(name == null || size <=0)
-			throw new NullPointerException();
-		this.size = size;
-	}
+public class Station extends Element {
+    public Station(String name, int size) {
+        super(name, size); 
+        if(size <= 0) throw new NullPointerException();
+    }
 }
