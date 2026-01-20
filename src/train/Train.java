@@ -54,7 +54,7 @@ public class Train implements Runnable {
 	private void move() throws InterruptedException {
         Element currentElement = pos.getPos();
         Direction currentDir = pos.getDirection();
-        Railway railway = currentElement.railway; // Supposez l'accès (getter ou package)
+        Railway railway = currentElement.railway; 
 
         Element nextElement = railway.getNextElement(currentElement, currentDir);
 
