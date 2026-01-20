@@ -2,7 +2,6 @@
 
 https://docs.google.com/document/d/1O3DqGUDj2hL5yDSUT-t1YE0CvUXdrPYanSlvILuaeLg/edit?usp=sharing
 
-
 ## Exercice 1
 
 ### Question 1.1
@@ -15,5 +14,13 @@ Dans la réalisation d'un déplacement d'un train, les classes ont les rôles su
 - `Position`: La classe position permet de relier un train à un élément. Elle indique dans quelle `Direction` (droite ou gauche) il va et dans quel `Element` il se trouve. 
 - `Train`: La classe `Train` est une classe qui permet de définir un train sur le réseau, il porte un nom et se trouve a une certaine `Position`.
 
+### Question 1.2
+Après ajout des méthodes, et attributs, nécessaires à la réalisation du déplacement d'un train, nous obtenons le diagramme de classe suivant : 
+
+![Diagramme de classe après modification](img/DiagrammeClasse.jpg)
+
+## Exercice 2
+
+### Question 2.2
 
 
