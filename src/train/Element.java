@@ -1,9 +1,5 @@
 package train;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * Cette classe abstraite est la représentation générique d'un élément de base d'un
  * circuit, elle factorise les fonctionnalitÃ©s communes des deux sous-classes :
@@ -17,65 +13,62 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Fabien Dagnat <fabien.dagnat@imt-atlantique.fr>
  * @author Philippe Tanguy <philippe.tanguy@imt-atlantique.fr>
  */
-public abstract class Element {
-	private final String name;
-	protected Railway railway;
 
-	// Gestion de la concurrence avec Locks
-    private final Lock lock = new ReentrantLock(true); // true = équité (FIFO)
-    private final Condition notFull = lock.newCondition();
+public abstract class Element {
+    private final String name;
+    protected Railway railway;
     
+    // État interne pour la synchronisation
     private final int maxCapacity;
     private int currentOccupancy = 0;
 
-	protected Element(String name, int maxCapacity) {
-        if(name == null) 
-			throw new NullPointerException();
-
+    protected Element(String name, int maxCapacity) {
+        if(name == null) throw new NullPointerException();
         this.name = name;
         this.maxCapacity = maxCapacity;
     }
 
-	public void setRailway(Railway r) {
-		if(r == null)
-			throw new NullPointerException();
-		
-		this.railway = r;
-	}
-
-	/**
-     * Tente d'entrer sur l'élément.
-     * Bloque le thread si la capacité maximale est atteinte.
-     */
-    public void enter() throws InterruptedException {
-        lock.lock(); 
-        try {
-            while (currentOccupancy >= maxCapacity) {
-                notFull.await();
-            }
-            currentOccupancy++;
-        } finally {
-            lock.unlock(); 
-        }
+    public void setRailway(Railway r) {
+        if(r == null) throw new NullPointerException();
+        this.railway = r;
     }
 
     /**
-     * Quitte l'élément et signale aux autres trains qu'une place est libre.
+     * INVARIANT DE SÛRETÉ
+     * Vérifie que l'état de l'élément est toujours valide.
+     * Doit être appelé à l'intérieur d'un bloc synchronized.
      */
-    public void leave() {
-        lock.lock();
-        try {
-            if (currentOccupancy > 0) {
-                currentOccupancy--;
-                notFull.signal(); 
-            }
-        } finally {
-            lock.unlock();
+    private void checkInvariant() {
+        if (currentOccupancy < 0) {
+            throw new IllegalStateException("INVARIANT VIOLÉ : Nombre de trains négatif sur " + name);
+        }
+        if (currentOccupancy > maxCapacity) {
+            throw new IllegalStateException("INVARIANT VIOLÉ : Capacité dépassée sur " + name + 
+                                            " (" + currentOccupancy + "/" + maxCapacity + ")");
         }
     }
 
-	@Override
-	public String toString() {
-		return this.name;
-	}
+    public synchronized void enter() throws InterruptedException {
+        while (currentOccupancy >= maxCapacity) {
+            wait();
+        }
+        
+        currentOccupancy++;
+        checkInvariant();
+    }
+
+    /**
+     * Sortie sécurisée (notifie les autres)
+     */
+    public synchronized void leave() {
+        currentOccupancy--;
+        
+        checkInvariant();        
+        notifyAll();
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " [" + currentOccupancy + "/" + maxCapacity + "]";
+    }
 }
