@@ -65,21 +65,32 @@ public class Train implements Runnable {
             return;
         }
 
-        System.out.println(name + " attend pour entrer sur " + nextElement);
-        if (currentDir == Direction.LR) {
+        nextElement.enter();
+
+        if (nextElement instanceof Section) {
             synchronized (railway) {
-                railway.setNbTrainsLR(railway.getNbTrainsLR()+1);
-            }
-        } else {
-            synchronized (railway) {
-                railway.setNbTrainsRL(railway.getNbTrainsRL()+1);
+                if (currentDir == Direction.LR) {
+                    railway.setNbTrainsLR(railway.getNbTrainsLR()+1);
+                } else {
+                    railway.setNbTrainsRL(railway.getNbTrainsRL()+1);
+                }
             }
         }
-        nextElement.enter();
-        
-        System.out.println(name + " avance : " + currentElement + " -> " + nextElement);
-        this.pos = new Position(nextElement, currentDir);
 
+        this.pos = new
+        Position(nextElement, currentDir);
+        System.out.println(name + " avance : " + currentElement + " -> " + nextElement);
+        
+        if (currentElement instanceof Section) {
+            synchronized (railway) {
+                if (currentDir == Direction.LR) {
+                    railway.setNbTrainsLR(railway.getNbTrainsLR()-1);
+                } else {
+                    railway.setNbTrainsRL(railway.getNbTrainsRL()-1);
+                }
+            }
+        }
+        
         currentElement.leave();
     }
 

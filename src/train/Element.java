@@ -23,13 +23,13 @@ public abstract class Element {
     protected int currentOccupancy = 0;
 
     protected Element(String name, int maxCapacity) {
-        if(name == null) throw new NullPointerException();
+        if (name == null) throw new NullPointerException();
         this.name = name;
         this.maxCapacity = maxCapacity;
     }
 
     public void setRailway(Railway r) {
-        if(r == null) throw new NullPointerException();
+        if (r == null) throw new NullPointerException();
         this.railway = r;
     }
 
@@ -38,32 +38,35 @@ public abstract class Element {
      * Vérifie que l'état de l'élément est toujours valide.
      * Doit être appelé à l'intérieur d'un bloc synchronized.
      */
-
-
     public boolean invariant(int occupancy) {
-        if(this instanceof Station){
-            return (occupancy >= 0 && occupancy <= getMaxCapacity());
-        }
+        boolean check = (occupancy >= 0 && occupancy <= maxCapacity);
         
-        return (occupancy >= 0 && occupancy <= getMaxCapacity())
-               && (railway.getNbTrainsLR() == 0
-               || railway.getNbTrainsRL() == 0);
+        if (this instanceof Station) {
+            return check;
+        }
+
+        return check && (railway.getNbTrainsLR() == 0 || railway.getNbTrainsRL() == 0);
     }
 
-    public synchronized void enter() throws InterruptedException {
-        while (!invariant(currentOccupancy + 1)) {
-            wait();
+    public void enter() throws InterruptedException {
+        synchronized (railway) {
+            while (!invariant(currentOccupancy + 1)) {
+                railway.wait();
+            }
+            currentOccupancy++;
+            railway.notifyAll();
         }
-        currentOccupancy++;
     }
 
     /**
      * Sortie sécurisée (notifie les autres)
      */
-    public synchronized void leave() {
-        if(invariant(currentOccupancy - 1)){
-            currentOccupancy--;        
-            notifyAll();
+    public void leave() {
+        synchronized (railway) {
+            if (invariant(currentOccupancy - 1)){
+                currentOccupancy--;        
+                railway.notifyAll();
+            }
         }
     }
 
@@ -84,9 +87,5 @@ public abstract class Element {
 
     public Railway getRailway() {
         return railway;
-    }
-
-    public int getMaxCapacity() {
-        return maxCapacity;
     }
 }

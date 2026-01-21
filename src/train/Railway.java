@@ -61,11 +61,13 @@ public class Railway {
 		return nbTrainsRL;
 	}
 
-	public void setNbTrainsLR(int nb) {
+	public synchronized void setNbTrainsLR(int nb) {
 		this.nbTrainsLR = nb;
+		notifyAll();
 	}
-	public void setNbTrainsRL(int nb) {
+	public synchronized void setNbTrainsRL(int nb) {
 		this.nbTrainsRL = nb;
+		notifyAll();
 	}
 
 	public Element[] getElements() {

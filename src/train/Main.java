@@ -6,8 +6,8 @@ package train;
 
 public class Main {
     public static void main(String[] args) {
-        Station A = new Station("GareA", 3);
-        Station D = new Station("GareD", 3);
+        Station A = new Station("GareA", 2);
+        Station D = new Station("GareD", 1);
         
         Section AB = new Section("AB");
         Section BC = new Section("BC");
@@ -21,18 +21,18 @@ public class Main {
 
 
         Position p = new Position(A, Direction.LR);
-        Position p2 = new Position(D, Direction.RL);
+        //Position p2 = new Position(D, Direction.RL);
 
         try {
             Train t1 = new Train("TGV_1", p);
             Train t2 = new Train("TER_2", p);
-            Train t3 = new Train("Fret_3", p2);
+            //Train t3 = new Train("Fret_3", p2);
 
             System.out.println("Lancement des trains...");
 
             new Thread(t1).start();
             new Thread(t2).start();
-            new Thread(t3).start();
+            //new Thread(t3).start();
 
             // Ajoutons un 4ème train qui part de l'autre côté (Gare D)
             // Attention : Sans gestion avancée des interblocages, ce train et les autres
