@@ -2,6 +2,8 @@
 
 https://docs.google.com/document/d/1O3DqGUDj2hL5yDSUT-t1YE0CvUXdrPYanSlvILuaeLg/edit?usp=sharing
 
+# REFAIRE DIAGRAMME DE CLASSE
+
 ## Exercice 1
 
 ### Question 1.1
@@ -28,9 +30,18 @@ D'après l'énoncé, l'invariant de sureté est défini par :
 maximum un train dans une section 
 - Si un train est en déplacement dans un sens, aucun autre train n’est en déplacement dans le sens contraire.
 
+Les variables qui permettent d'exprimer l'invariant de sûreté de trains sont donc :
+- Pour la première condition : `currentOccupancy` et `maxCapacity` avec `maxCapacity = 1` dans le cas d'une section  
+- Pour la deuxième condition : `nbTrainsLR` et `nbTrainsRL`
+
+### Question 2.3
+
 En termes de variables, on peut exprimer l'invariant de sûreté de la manière suivante :  
+`(0 <= currentOccupancy ∧ currentOccupancy <= maxCapacity) ∧ (nbTrainsLR = 0 ∨ nbTrainsRL = 0)`
 
+### Question 2.4
 
+Un train peut 
 
 
 
