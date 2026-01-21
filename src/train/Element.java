@@ -41,7 +41,13 @@ public abstract class Element {
 
 
     public boolean invariant(int occupancy) {
-        return occupancy >= 0 && occupancy <= maxCapacity;
+        if(this instanceof Station){
+            return (occupancy >= 0 && occupancy <= getMaxCapacity());
+        }
+        
+        return (occupancy >= 0 && occupancy <= getMaxCapacity())
+               && (railway.getNbTrainsLR() == 0
+               || railway.getNbTrainsRL() == 0);
     }
 
     public synchronized void enter() throws InterruptedException {
