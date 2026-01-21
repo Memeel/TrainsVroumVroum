@@ -38,33 +38,28 @@ public abstract class Element {
      * Vérifie que l'état de l'élément est toujours valide.
      * Doit être appelé à l'intérieur d'un bloc synchronized.
      */
-    private void checkInvariant() {
-        if (currentOccupancy < 0) {
-            throw new IllegalStateException("INVARIANT VIOLÉ : Nombre de trains négatif sur " + name);
-        }
-        if (currentOccupancy > maxCapacity) {
-            throw new IllegalStateException("INVARIANT VIOLÉ : Capacité dépassée sur " + name + 
-                                            " (" + currentOccupancy + "/" + maxCapacity + ")");
-        }
+
+
+    private boolean invariant(int occupancy) {
+        return occupancy >= 0 && occupancy <= maxCapacity;
     }
 
     public synchronized void enter() throws InterruptedException {
-        while (currentOccupancy >= maxCapacity) {
+        while (!invariant(currentOccupancy + 1)) {
             wait();
         }
         
         currentOccupancy++;
-        checkInvariant();
     }
 
     /**
      * Sortie sécurisée (notifie les autres)
      */
     public synchronized void leave() {
-        currentOccupancy--;
-        
-        checkInvariant();        
-        notifyAll();
+        if(invariant(currentOccupancy - 1)){
+            currentOccupancy--;        
+            notifyAll();
+        }
     }
 
     @Override
