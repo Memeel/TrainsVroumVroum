@@ -20,7 +20,7 @@ public abstract class Element {
     
     // État interne pour la synchronisation
     private final int maxCapacity;
-    private int currentOccupancy = 0;
+    protected int currentOccupancy = 0;
 
     protected Element(String name, int maxCapacity) {
         if(name == null) throw new NullPointerException();
@@ -40,7 +40,7 @@ public abstract class Element {
      */
 
 
-    private boolean invariant(int occupancy) {
+    public boolean invariant(int occupancy) {
         return occupancy >= 0 && occupancy <= maxCapacity;
     }
 
@@ -48,7 +48,6 @@ public abstract class Element {
         while (!invariant(currentOccupancy + 1)) {
             wait();
         }
-        
         currentOccupancy++;
     }
 
@@ -65,5 +64,23 @@ public abstract class Element {
     @Override
     public String toString() {
         return this.name + " [" + currentOccupancy + "/" + maxCapacity + "]";
+    }
+
+    public int getOccupancy() {
+        return currentOccupancy;
+    }
+
+    public void setOccupancy(int occupancy) {
+        if(!invariant(occupancy))
+            throw new IllegalArgumentException("Invalid occupancy value");
+        this.currentOccupancy = occupancy;
+    }
+
+    public Railway getRailway() {
+        return railway;
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
     }
 }

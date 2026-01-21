@@ -14,4 +14,32 @@ public class Station extends Element {
         super(name, size); 
         if (size <= 0) throw new NullPointerException();
     }
+
+    @Override
+    public boolean invariant(int occupancy) {
+        return (occupancy >= 0 && occupancy <= getMaxCapacity())
+               && (railway.getNbTrainsLR() == 0
+               || railway.getNbTrainsRL() == 0);
+    }
+
+    @Override
+    public synchronized void enter() throws InterruptedException {
+        while (!invariant(currentOccupancy + 1)) {
+            wait();
+        }
+        currentOccupancy++;
+    }
+
+    /**
+     * Sortie sécurisée (notifie les autres)
+     */
+    @Override
+    public synchronized void leave() {
+        if(invariant(currentOccupancy - 1)){
+            currentOccupancy--;        
+            notifyAll();
+        }
+    }
 }
+
+

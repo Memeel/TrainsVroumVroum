@@ -66,7 +66,15 @@ public class Train implements Runnable {
         }
 
         System.out.println(name + " attend pour entrer sur " + nextElement);
-        
+        if (currentDir == Direction.LR) {
+            synchronized (railway) {
+                railway.setNbTrainsLR(railway.getNbTrainsLR()+1);
+            }
+        } else {
+            synchronized (railway) {
+                railway.setNbTrainsRL(railway.getNbTrainsRL()+1);
+            }
+        }
         nextElement.enter();
         
         System.out.println(name + " avance : " + currentElement + " -> " + nextElement);

@@ -21,11 +21,12 @@ public class Main {
 
 
         Position p = new Position(A, Direction.LR);
+        Position p2 = new Position(D, Direction.RL);
 
         try {
             Train t1 = new Train("TGV_1", p);
             Train t2 = new Train("TER_2", p);
-            Train t3 = new Train("Fret_3", p);
+            Train t3 = new Train("Fret_3", p2);
 
             System.out.println("Lancement des trains...");
 
