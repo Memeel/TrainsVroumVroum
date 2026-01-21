@@ -55,4 +55,4 @@ Ces actions doivent être ajoutées dans la classe `Element`, être appelées da
 
 ### Question 2.6
 
-Selon la méthode de construction d'une solution de synchronisation donnée plus haut, il faudrait une méthode `canEnter()` qui renvoie un boolean pour savoir si le train peut entrer sur les rails : si ce n'est pas le cas, on utilise un `wait()` ainsi qu'un `notifyAll()` après chaque modification de l'état.
+Selon la méthode de construction d'une solution de synchronisation donnée plus haut, il faudrait une méthode `invariant()` qui renvoie un boolean pour savoir si le train peut entrer sur les rails : si ce n'est pas le cas, on utilise un `wait()` ainsi qu'un `notifyAll()` après chaque modification de l'état.
