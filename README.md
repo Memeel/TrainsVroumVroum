@@ -23,4 +23,15 @@ Après ajout des méthodes, et attributs, nécessaires à la réalisation du dé
 
 ### Question 2.2
 
+D'après l'énoncé, l'invariant de sureté est défini par : 
+- Les trains qui circulent dans le même sens ne se doublent pas : il faut garantir qu’il y a au
+maximum un train dans une section 
+- Si un train est en déplacement dans un sens, aucun autre train n’est en déplacement dans le sens contraire.
+
+En termes de variables, on peut exprimer l'invariant de sûreté de la manière suivante :  
+
+
+
+
+
 
