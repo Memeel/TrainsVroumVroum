@@ -4,6 +4,12 @@ https://docs.google.com/document/d/1O3DqGUDj2hL5yDSUT-t1YE0CvUXdrPYanSlvILuaeLg/
 
 # REFAIRE DIAGRAMME DE CLASSE
 
+## Auteurs
+
+- MARBOEUF Kéwan
+- NEHLIL Kamel
+- WANG Mélina
+
 ## Exercice 1
 
 ### Question 1.1
@@ -19,7 +25,7 @@ Dans la réalisation d'un déplacement d'un train, les classes ont les rôles su
 ### Question 1.2
 Après ajout des méthodes, et attributs, nécessaires à la réalisation du déplacement d'un train, nous obtenons le diagramme de classe suivant : 
 
-![Diagramme de classe après modification](img/DiagrammeClasse.jpg)
+![Diagramme de classe après modification](doc/img/DiagrammeClasse.jpg)
 
 ## Exercice 2
 
@@ -41,8 +47,12 @@ En termes de variables, on peut exprimer l'invariant de sûreté de la manière 
 
 ### Question 2.4
 
-Un train peut 
+Comme actions "critiques", le train peut entrer ou sortir d'un élément (section ou gare). Ce sont ces actions qui ont un impact sur l'invariant de sûreté.
 
+### Question 2.5
 
+Ces actions doivent être ajoutées dans la classe `Element`, être appelées dans `Train` et synchronisées avec `Railway`.
 
+### Question 2.6
 
+Selon la méthode de construction d'une solution de synchronisation donnée plus haut, il faudrait une méthode `canEnter()` qui renvoie un boolean pour savoir si le train peut entrer sur les rails : si ce n'est pas le cas, on utilise un `wait()` ainsi qu'un `notifyAll()` après chaque modification de l'état.
