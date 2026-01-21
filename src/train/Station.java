@@ -12,6 +12,6 @@ package train;
 public class Station extends Element {
     public Station(String name, int size) {
         super(name, size); 
-        if(size <= 0) throw new NullPointerException();
+        if (size <= 0) throw new NullPointerException();
     }
 }
