@@ -54,9 +54,8 @@ public class Train implements Runnable {
 	private void move() throws InterruptedException {
         Element currentElement = pos.getPos();
         Direction currentDir = pos.getDirection();
-        Railway railway = currentElement.railway; 
-
-        Element nextElement = railway.getNextElement(currentElement, currentDir);
+        //Railway railway = currentElement.railway; 
+        Element nextElement = currentElement.getNextElement(currentDir);
 
         if (nextElement == null) {
             Direction newDir = (currentDir == Direction.LR) ? Direction.RL : Direction.LR;
@@ -66,20 +65,10 @@ public class Train implements Runnable {
         }
 
         System.out.println(name + " attend pour entrer sur " + nextElement);
-        if (currentDir == Direction.LR) {
-            synchronized (railway) {
-                railway.setNbTrainsLR(railway.getNbTrainsLR()+1);
-            }
-        } else {
-            synchronized (railway) {
-                railway.setNbTrainsRL(railway.getNbTrainsRL()+1);
-            }
-        }
-        nextElement.enter();
         
+        nextElement.enter();
         System.out.println(name + " avance : " + currentElement + " -> " + nextElement);
         this.pos = new Position(nextElement, currentDir);
-
         currentElement.leave();
     }
 

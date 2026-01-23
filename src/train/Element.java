@@ -17,6 +17,8 @@ package train;
 public abstract class Element {
     private final String name;
     protected Railway railway;
+    public Element nextElementLR;
+    public Element nextElementRL;
     
     // État interne pour la synchronisation
     private final int maxCapacity;
@@ -26,6 +28,15 @@ public abstract class Element {
         if(name == null) throw new NullPointerException();
         this.name = name;
         this.maxCapacity = maxCapacity;
+    }
+
+
+    public Element getNextElement(Direction d) {
+        if (d == Direction.LR) {
+            return nextElementLR;
+        } else {
+            return nextElementRL;
+        }
     }
 
     public void setRailway(Railway r) {
@@ -40,12 +51,12 @@ public abstract class Element {
      */
 
 
-    public boolean invariant(int occupancy) {
-        return occupancy >= 0 && occupancy <= maxCapacity;
+    public boolean invariant(int occupancy, Direction currentDir) {
+        return (occupancy >= 0 && occupancy <= getMaxCapacity()); 
     }
 
-    public synchronized void enter() throws InterruptedException {
-        while (!invariant(currentOccupancy + 1)) {
+    public synchronized void enter(Direction currentDir) throws InterruptedException {
+        while (!invariant(currentOccupancy + 1,currentDir)) {
             wait();
         }
         currentOccupancy++;

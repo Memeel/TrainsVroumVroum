@@ -10,16 +10,26 @@ package train;
  */
 public class Railway {
 	private final Element[] elements;
-	private int nbTrainsRL = 0;
-	private int nbTrainsLR = 0;
 
 	public Railway(Element[] elements) {
 		if(elements == null)
 			throw new NullPointerException();
 		
 		this.elements = elements;
-		for (Element e : elements)
-			e.setRailway(this);
+		for (int i = 0; i < elements.length; i++) {
+			elements[i].setRailway(this);
+			if (i < elements.length - 1) {
+				elements[i].nextElementLR = elements[i + 1];
+			} else {
+				elements[i].nextElementLR = null;
+			}
+			if (i > 0) {
+				elements[i].nextElementRL = elements[i - 1];
+			} else {
+				elements[i].nextElementRL = null;
+			}
+		}
+		
 	}
 
 	public Element getNextElement(Element current, Direction d) {
@@ -52,20 +62,6 @@ public class Railway {
 			result.append(e);
 		}
 		return result.toString();
-	}
-
-	public int getNbTrainsLR() {
-		return nbTrainsLR;
-	}
-	public int getNbTrainsRL() {
-		return nbTrainsRL;
-	}
-
-	public void setNbTrainsLR(int nb) {
-		this.nbTrainsLR = nb;
-	}
-	public void setNbTrainsRL(int nb) {
-		this.nbTrainsRL = nb;
 	}
 
 	public Element[] getElements() {
