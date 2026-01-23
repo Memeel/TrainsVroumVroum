@@ -43,7 +43,7 @@ Les variables qui permettent d'exprimer l'invariant de sûreté de trains sont d
 ### Question 2.3
 
 En termes de variables, on peut exprimer l'invariant de sûreté de la manière suivante :  
-`(0 <= currentOccupancy ∧ currentOccupancy <= maxCapacity) ∧ (nbTrainsLR = 0 ∨ nbTrainsRL = 0)`
+$(0 <= currentOccupancy ∧ currentOccupancy <= maxCapacity) ∧ (nbTrainsLR = 0 ∨ nbTrainsRL = 0)$
 
 ### Question 2.4
 
@@ -56,3 +56,24 @@ Ces actions doivent être ajoutées dans la classe `Element`, être appelées da
 ### Question 2.6
 
 Selon la méthode de construction d'une solution de synchronisation donnée plus haut, il faudrait une méthode `invariant()` qui renvoie un boolean pour savoir si le train peut entrer sur les rails : si ce n'est pas le cas, on utilise un `wait()` ainsi qu'un `notifyAll()` après chaque modification de l'état.
+
+## Exercice 3
+
+### Question 3.1
+
+On cherche à empêcher les sorties de gare si des trains dans l'autre sens sont sur la ligne. Pour cela, il faudrait rajouter les variables `nbTrainsLR` et `nbTrainsRL`, qui permettent de savoir le nombre de trains se déplaçant dans un sens et dans l'autre.
+
+### Question 3.2
+
+Cette nouvelle condition pour l'invariant s'exprime donc de la manière suivante :  
+$(nbTrainsLR = 0 ∨ nbTrainsRL = 0)$
+
+### Question 3.3
+
+C'est `Railway` qui est responsable de ces variables car c'est cette classe qui a une vue d'ensemble du circuit.
+
+## Exercice 4
+
+### Question 4.2
+
+Pour éviter un interblocage, si on a une gare intermédiaire à $n$ places et qu'on a $n+2$ trains, il faudrait qu'il y ai seulement 2 trains qui se déplacent dans des sens opposés
