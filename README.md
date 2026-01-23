@@ -76,4 +76,4 @@ C'est `Railway` qui est responsable de ces variables car c'est cette classe qui 
 
 ### Question 4.2
 
-Pour éviter un interblocage, si on a une gare intermédiaire à $n$ places et qu'on a $n+2$ trains, il faudrait qu'il y ai seulement 2 trains qui se déplacent dans des sens opposés
+Pour éviter un interblocage, si on a une gare intermédiaire à $n$ places et qu'on a $n+2$ trains, il faudrait que
