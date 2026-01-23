@@ -10,6 +10,8 @@ package train;
  */
 public class Railway {
 	private final Element[] elements;
+	private int nbTrainsRL = 0;
+	private int nbTrainsLR = 0;
 
 	public Railway(Element[] elements) {
 		if(elements == null)
@@ -50,5 +52,25 @@ public class Railway {
 			result.append(e);
 		}
 		return result.toString();
+	}
+
+	public int getNbTrainsLR() {
+		return nbTrainsLR;
+	}
+	public int getNbTrainsRL() {
+		return nbTrainsRL;
+	}
+
+	public synchronized void setNbTrainsLR(int nb) {
+		this.nbTrainsLR = nb;
+		notifyAll();
+	}
+	public synchronized void setNbTrainsRL(int nb) {
+		this.nbTrainsRL = nb;
+		notifyAll();
+	}
+
+	public Element[] getElements() {
+		return elements;
 	}
 }

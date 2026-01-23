@@ -20,16 +20,16 @@ public abstract class Element {
     
     // État interne pour la synchronisation
     private final int maxCapacity;
-    private int currentOccupancy = 0;
+    protected int currentOccupancy = 0;
 
     protected Element(String name, int maxCapacity) {
-        if(name == null) throw new NullPointerException();
+        if (name == null) throw new NullPointerException();
         this.name = name;
         this.maxCapacity = maxCapacity;
     }
 
     public void setRailway(Railway r) {
-        if(r == null) throw new NullPointerException();
+        if (r == null) throw new NullPointerException();
         this.railway = r;
     }
 
@@ -38,32 +38,54 @@ public abstract class Element {
      * Vérifie que l'état de l'élément est toujours valide.
      * Doit être appelé à l'intérieur d'un bloc synchronized.
      */
+    public boolean invariant(int occupancy) {
+        boolean check = (occupancy >= 0 && occupancy <= maxCapacity);
+        
+        if (this instanceof Station) {
+            return check;
+        }
 
-
-    private boolean invariant(int occupancy) {
-        return occupancy >= 0 && occupancy <= maxCapacity;
+        return check && (railway.getNbTrainsLR() == 0 || railway.getNbTrainsRL() == 0);
     }
 
-    public synchronized void enter() throws InterruptedException {
-        while (!invariant(currentOccupancy + 1)) {
-            wait();
+    public void enter() throws InterruptedException {
+        synchronized (railway) {
+            while (!invariant(currentOccupancy + 1)) {
+                railway.wait();
+            }
+            currentOccupancy++;
+            railway.notifyAll();
         }
-        
-        currentOccupancy++;
     }
 
     /**
      * Sortie sécurisée (notifie les autres)
      */
-    public synchronized void leave() {
-        if(invariant(currentOccupancy - 1)){
-            currentOccupancy--;        
-            notifyAll();
+    public void leave() {
+        synchronized (railway) {
+            if (invariant(currentOccupancy - 1)){
+                currentOccupancy--;        
+                railway.notifyAll();
+            }
         }
     }
 
     @Override
     public String toString() {
         return this.name + " [" + currentOccupancy + "/" + maxCapacity + "]";
+    }
+
+    public int getOccupancy() {
+        return currentOccupancy;
+    }
+
+    public void setOccupancy(int occupancy) {
+        if(!invariant(occupancy))
+            throw new IllegalArgumentException("Invalid occupancy value");
+        this.currentOccupancy = occupancy;
+    }
+
+    public Railway getRailway() {
+        return railway;
     }
 }

@@ -14,4 +14,8 @@ public class Station extends Element {
         super(name, size); 
         if (size <= 0) throw new NullPointerException();
     }
+
+    
 }
+
+
