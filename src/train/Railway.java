@@ -10,9 +10,13 @@ package train;
  */
 public class Railway {
 	private final Element[] elements;
+	private int nbWaitingLR = 0;
+	private int nbWaitingRL = 0;
+	private int nbRunningLR = 0;
+	private int nbRunningRL = 0;
 
 	public Railway(Element[] elements) {
-		if(elements == null)
+		if (elements == null)
 			throw new NullPointerException();
 		
 		this.elements = elements;
@@ -32,7 +36,63 @@ public class Railway {
 		
 	}
 
-	public Element getNextElement(Element current, Direction d) {
+	public synchronized void addWaitingTrain(Direction d) {
+		if (d == Direction.LR) {
+			nbWaitingLR++;
+		} else {
+			nbWaitingRL++;
+		}
+	}
+
+	public synchronized void removeWaitingTrain(Direction d) {
+		if (d == Direction.LR) {
+			nbWaitingLR--;
+		} else {
+			nbWaitingRL--;
+		}
+	}
+
+	public synchronized int getNbWaitingTrains(Direction d) {
+		if (d == Direction.LR) {
+			return nbWaitingLR;
+		} else {
+			return nbWaitingRL;
+		}
+	}
+
+	public synchronized void addRunningTrain(Direction d) {
+		if (d == Direction.LR) {
+			nbRunningLR++;
+		} else {
+			nbRunningRL++;
+		}
+	}
+
+	public synchronized void removeRunningTrain(Direction d) {
+		if (d == Direction.LR) {
+			nbRunningLR--;
+		} else {
+			nbRunningRL--;
+		}
+	}
+
+	public synchronized int getNbRunningTrains(Direction d) {
+		if (d == Direction.LR) {
+			return nbRunningLR;
+		} else {
+			return nbRunningRL;
+		}
+	}
+
+	public synchronized int countTrainsInSections() {
+		return elements[0].countRunningRecursive();
+	}
+
+	public synchronized void globalNotify() {
+		notifyAll();
+	}
+
+	public synchronized Element getNextElement(Element current, Direction d) {
         int index = -1;
         for (int i = 0; i < elements.length; i++) {
             if (elements[i] == current) {

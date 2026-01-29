@@ -33,7 +33,7 @@ public class Train implements Runnable {
         this.pos = p.clone();
         
         try {
-            this.pos.getPos().enter();
+            this.pos.getPos().enter(this.pos.getDirection(), null);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -54,22 +54,22 @@ public class Train implements Runnable {
 	private void move() throws InterruptedException {
         Element currentElement = pos.getPos();
         Direction currentDir = pos.getDirection();
-        //Railway railway = currentElement.railway; 
-        Element nextElement = currentElement.getNextElement(currentDir);
+        Element nextElement = (currentDir == Direction.LR) ? currentElement.nextElementLR : currentElement.nextElementRL;
 
         if (nextElement == null) {
             Direction newDir = (currentDir == Direction.LR) ? Direction.RL : Direction.LR;
             this.pos = new Position(currentElement, newDir);
-            System.out.println(">>> " + name + " change de sens (reste sur " + currentElement + ")");
+            System.out.println(">>> " + name + " fait demi-tour à " + currentElement);
             return;
         }
 
         System.out.println(name + " attend pour entrer sur " + nextElement);
         
-        nextElement.enter();
+        nextElement.enter(currentDir, currentElement);
+        
         System.out.println(name + " avance : " + currentElement + " -> " + nextElement);
+        currentElement.leave(currentDir);
         this.pos = new Position(nextElement, currentDir);
-        currentElement.leave();
     }
 
 	@Override

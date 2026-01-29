@@ -15,7 +15,21 @@ public class Station extends Element {
         if (size <= 0) throw new NullPointerException();
     }
 
-    
+    @Override
+    public synchronized void enter(Direction d, Element from) throws InterruptedException {
+        while (currentOccupancy >= getMaxCapacity()) {
+            wait();
+        }
+        currentOccupancy++;
+        synchronized(railway) { railway.notifyAll(); }
+    }
+
+    @Override
+    public synchronized void leave(Direction d) {
+        currentOccupancy--;
+        notifyAll();
+        synchronized(railway) { railway.notifyAll(); }
+    }
 }
 
 

@@ -25,11 +25,10 @@ public abstract class Element {
     protected int currentOccupancy = 0;
 
     protected Element(String name, int maxCapacity) {
-        if(name == null) throw new NullPointerException();
+        if (name == null) throw new NullPointerException();
         this.name = name;
         this.maxCapacity = maxCapacity;
     }
-
 
     public Element getNextElement(Direction d) {
         if (d == Direction.LR) {
@@ -39,8 +38,32 @@ public abstract class Element {
         }
     }
 
+    public Station getDestinationStation(Direction d) {
+        Element next = this.getNextElement(d);
+        if (next == null) return null;
+        if (next instanceof Station) return (Station) next;
+        return next.getDestinationStation(d);
+    }
+
+    public int countRunningRecursive() {
+        int count = (this instanceof Section) ? currentOccupancy : 0;
+        if (nextElementLR == null) return count;
+        return count + nextElementLR.countRunningRecursive();
+    }
+
+    public abstract void enter(Direction d, Element from) throws InterruptedException;
+    public abstract void leave(Direction d);
+
+    public int getMaxCapacity() {return maxCapacity;}
+    public int getCurrentOccupancy() {return currentOccupancy;}
+
+    @Override 
+    public String toString() {
+        return name + "[" + currentOccupancy + "]";
+    }
+
     public void setRailway(Railway r) {
-        if(r == null) throw new NullPointerException();
+        if (r == null) throw new NullPointerException();
         this.railway = r;
     }
 
@@ -48,7 +71,7 @@ public abstract class Element {
      * INVARIANT DE SÛRETÉ
      * Vérifie que l'état de l'élément est toujours valide.
      * Doit être appelé à l'intérieur d'un bloc synchronized.
-     */
+     *
 
 
     public boolean invariant(int occupancy, Direction currentDir) {
@@ -64,9 +87,9 @@ public abstract class Element {
 
     /**
      * Sortie sécurisée (notifie les autres)
-     */
+     *
     public synchronized void leave() {
-        if(invariant(currentOccupancy - 1)){
+        if(invariant(currentOccupancy - 1, null)){
             currentOccupancy--;        
             notifyAll();
         }
@@ -75,10 +98,6 @@ public abstract class Element {
     @Override
     public String toString() {
         return this.name + " [" + currentOccupancy + "/" + maxCapacity + "]";
-    }
-
-    public int getOccupancy() {
-        return currentOccupancy;
     }
 
     public void setOccupancy(int occupancy) {
@@ -90,8 +109,5 @@ public abstract class Element {
     public Railway getRailway() {
         return railway;
     }
-
-    public int getMaxCapacity() {
-        return maxCapacity;
-    }
+    */
 }
