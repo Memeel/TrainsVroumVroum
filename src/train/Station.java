@@ -16,19 +16,21 @@ public class Station extends Element {
     }
 
     @Override
-    public synchronized void enter(Direction d, Element from) throws InterruptedException {
-        while (currentOccupancy >= getMaxCapacity()) {
-            wait();
+    public void enter(Direction d, Element from) throws InterruptedException {
+        synchronized(this) {
+            while (currentOccupancy >= getMaxCapacity()) {
+                wait();
+            }
+            currentOccupancy++;
         }
-        currentOccupancy++;
-        synchronized(railway) { railway.notifyAll(); }
     }
 
     @Override
-    public synchronized void leave(Direction d) {
-        currentOccupancy--;
-        notifyAll();
-        synchronized(railway) { railway.notifyAll(); }
+    public void leave(Direction d) {
+        synchronized(this) {
+            currentOccupancy--;
+            notifyAll();
+        }
     }
 }
 

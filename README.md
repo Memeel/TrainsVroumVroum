@@ -61,19 +61,19 @@ Selon la méthode de construction d'une solution de synchronisation donnée plus
 
 ### Question 3.1
 
-On cherche à empêcher les sorties de gare si des trains dans l'autre sens sont sur la ligne. Pour cela, il faudrait rajouter les variables `nbTrainsLR` et `nbTrainsRL`, qui permettent de savoir le nombre de trains se déplaçant dans un sens et dans l'autre.
+On cherche à empêcher les sorties de gare si des trains dans l'autre sens sont sur la ligne. Pour cela, on introduit des compteurs globaux :
+- `nbRunningLR / RL` : Nombre de trains actuellement dans des sections pour chaque direction
+- `nbWaitingLR / RL` : Nombre de trains en attente en gare souhaitant partir dans une direction donnée
+
+L'invariant de sûreté pour sortir d'une gare est :
+- Absence de conflit : Aucun train ne doit circuler dans le sens opposé (nbRunning(opposite) == 0)
+- Garantie de place (Réservation) : La capacité de la gare de destination doit être suffisante pour accueillir tous les trains déjà en route ainsi que ceux qui attendent de partir dans la même direction 
 
 ### Question 3.2
 
 Cette nouvelle condition pour l'invariant s'exprime donc de la manière suivante :  
-$(nbTrainsLR = 0 ∨ nbTrainsRL = 0)$
+$$Capacity(Dest) \ge (RunningTrains + WaitingTrains)$$
 
 ### Question 3.3
 
 C'est `Railway` qui est responsable de ces variables car c'est cette classe qui a une vue d'ensemble du circuit.
-
-## Exercice 4
-
-### Question 4.2
-
-Pour éviter un interblocage, si on a une gare intermédiaire à $n$ places et qu'on a $n+2$ trains, il faudrait que

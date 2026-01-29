@@ -13,7 +13,7 @@ public class Section extends Element {
     }
 
     @Override
-    public synchronized void enter(Direction d, Element from) throws InterruptedException {
+    public void enter(Direction d, Element from) throws InterruptedException {
         if (from instanceof Station) {
             Station dest = getDestinationStation(d);
             Direction opposite = (d == Direction.LR) ? Direction.RL : Direction.LR;
@@ -45,7 +45,7 @@ public class Section extends Element {
     }
 
     @Override
-    public synchronized void leave(Direction d) {
+    public void leave(Direction d) {
         synchronized(this) {
             currentOccupancy--;
             notifyAll();

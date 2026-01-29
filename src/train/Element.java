@@ -22,7 +22,7 @@ public abstract class Element {
     
     // État interne pour la synchronisation
     private final int maxCapacity;
-    protected int currentOccupancy = 0;
+    protected volatile int currentOccupancy = 0;
 
     protected Element(String name, int maxCapacity) {
         if (name == null) throw new NullPointerException();
